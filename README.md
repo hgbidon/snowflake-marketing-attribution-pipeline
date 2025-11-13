@@ -1,45 +1,46 @@
-# Marketing Attribution Analytics Pipeline in Snowflake  
-### Cloud-Based Multi-Touch Attribution & Channel Insights
+# Marketing Attribution Analytics Pipeline  
+### Snowflake + Databricks | Multi-Touch Attribution Dashboard
 
-This project implements a **cloud-hosted marketing attribution analytics pipeline** in Snowflake using a real-world multi-touch attribution dataset. It transforms raw customer journey logs into **attribution-ready datasets**, calculates **last-touch and linear attribution models**, and produces **channel performance insights** visualized through a Snowflake Dashboard.
+This project builds a full **marketing attribution pipeline** using Snowflake for data processing and Databricks for visualization. Starting from a raw multi-touch attribution dataset, the workflow cleans, transforms, and models customer journeys to produce **last-touch attribution**, **linear attribution**, and **channel performance insights**.
 
 ---
 
-## 🚀 Project Goals
+## 🚀 Project Objectives
 
-- Build a scalable marketing analytics pipeline in Snowflake  
-- Clean, standardize, and enrich multi-touch attribution data  
-- Engineer journey features (touch order, funnel path, journey length)  
-- Implement **last-touch** and **linear attribution** models  
-- Create insight-ready summary tables for reporting  
-- Develop a Snowflake dashboard for stakeholder consumption  
-- Demonstrate analytics governance and reproducible SQL workflows  
+- Import and clean a real-world multi-touch attribution dataset in Snowflake  
+- Build a scalable SQL pipeline for:
+  - touchpoint normalization  
+  - journey enrichment  
+  - attribution modeling  
+  - channel-level summary tables  
+- Create dashboards directly in Snowflake  
+- Use Databricks for deeper visual exploration  
+- Produce insights for marketing, performance, and funnel optimization  
 
 ---
 
 ## 🧰 Tech Stack
 
-| Component | Tools Used |
-|----------|------------|
-| Cloud Data Warehouse | **Snowflake** |
-| SQL Processing | Snowflake Worksheets |
-| Dashboarding | **Snowflake Native Dashboards** |
-| Dataset | Kaggle – Multi-Touch Attribution Dataset |
-| Skills Demonstrated | Attribution modeling, ETL, data cleaning, feature engineering |
+| Layer | Tools |
+|-------|-------|
+| Data Warehouse | **Snowflake** |
+| Transformation | SQL (Snowflake Worksheets) |
+| Visualization | **Snowflake Dashboard**, Databricks (Python + Matplotlib/Seaborn) |
+| Dataset | Kaggle — Multi-Touch Attribution |
 
 ---
 
-## 📊 Dataset Overview
+## 📊 Dataset
 
 **Source:**  
 https://www.kaggle.com/datasets/vivekparasharr/multi-touch-attribution
 
-**Key columns:**
-- `User ID`
-- `Timestamp`
-- `Channel`
-- `Campaign`
-- `Conversion`
+**Key fields:**  
+- `User ID`  
+- `Timestamp`  
+- `Channel`  
+- `Campaign`  
+- `Conversion`  
 
 ---
 
@@ -59,8 +60,9 @@ LINEAR_ATTRIBUTION
 CHANNEL_SUMMARY
 ↓
 Snowflake Dashboard
+↓
+Databricks Visual Exploration
 ```
-
 
 ---
 
@@ -142,63 +144,88 @@ ORDER BY conversions DESC;
 
 ## 📈 Snowflake Dashboard
 
-The Snowflake dashboard visualizes the core attribution insights created from the pipeline. It includes:
-
-- **Conversion Volume by Last-Touch Channel**  
-  Identifies which channels most frequently appear as the final converting touch.
-
-- **Conversion Rate by Channel**  
-  Measures effectiveness normalized for traffic volume.
-
-- **Average Journey Length**  
-  Shows how many touchpoints precede conversion events.
-
-- **Linear Attribution Credit by Channel**  
-  Distributes credit across all touchpoints in converting journeys.
-
-**Recommended Dashboard Name:**  
+**Dashboard Name:**  
 **Marketing Attribution Insights Dashboard**
+
+**Includes:**
+- Conversions by channel  
+- Conversion rate by channel  
+- Linear vs. last-touch attribution credit  
+- Journey length KPIs  
+- Touch order performance  
+
+---
+
+## 📊 Databricks Visualizations
+
+The Databricks notebook produces several categories of insights:
+
+### **Channel-Level Insights**
+- Conversions & conversion rate  
+- Users touched per channel  
+- Attribution credit vs. traffic volume  
+
+### **Journey & Funnel Insights**
+- Conversion rate by touch order  
+- Conversion rate by campaign  
+- Journey length comparison (converters vs. non-converters)  
+
+### **Time-Based Insights**
+- Conversion heatmap by hour and day  
+- Share of total conversions by channel  
 
 ---
 
 ## 🎯 Key Insights
 
-- Early-funnel channels like **Social Media** and **Search Ads** appear frequently in first touches.  
-- **Retargeting** and **Email** close a significant portion of conversions under last-touch modeling.  
-- Journeys with **3–4 touchpoints** show the strongest conversion likelihood.  
-- Linear attribution reveals hidden value from **upper-funnel** channels that last-touch underrepresents.  
-- Attribution models show that **multi-touch journeys** often outperform single-touch paths.
+### **Channel Performance**
+- **Direct traffic, display ads, and referral** consistently delivered the highest number of conversions across attribution models.  
+- **Email** underperformed in conversion rate compared to other channels, despite having a similar volume of users touched.  
+- **Search ads** showed the lowest conversion volume and conversion share.
+
+### **Attribution Findings**
+- Linear attribution confirmed that **upper-funnel channels** (social media, display ads) still contribute meaningful value before conversion.  
+- Last-touch attribution concentrates credit toward **direct traffic and email**, but linear attribution exposes broader influence across the journey.
+
+### **User Journey Insights**
+- Most customer journeys contain **3–5 touchpoints**, aligning with typical multi-touch marketing behavior.  
+- Longer journeys show slightly higher conversion probability, with a noticeable increase around **touch order 6 and 9**.  
+- Extremely long journeys (10–12 touches) showed instability, suggesting noise or edge-case behavior.
+
+### **Campaign Performance**
+- Campaigns such as **Discount Offer**, **Brand Awareness**, and **New Product Launch** performed similarly in conversion rate.  
+- **Retargeting** campaigns delivered strong mid-funnel lift but were not the highest in conversion rate.  
+- **Winter Sale** performed on the lower end compared to other campaigns.
+
+### **Time-Based Behavior**
+- The conversion heatmap shows clear hourly/day-of-week variation, with stronger performance in specific afternoon and evening windows.  
+- Both Monday and Tuesday exhibit distinct high-conversion periods, suggesting opportunities for send-time optimization.
+
+### **Traffic vs. Conversion Dynamics**
+- Channels with higher traffic (e.g., display ads, direct traffic) generally had higher attributed conversions.  
+- **Social media** had mid-range traffic but moderate conversion share, indicating it plays a supporting role rather than a closing role.
 
 ---
 
 ## 📎 Folder Structure
 ```sql
 ├── sql/
-│ ├── cleaned_touchpoints.sql
-│ ├── journey_enriched.sql
-│ ├── last_touch.sql
-│ ├── linear_attribution.sql
-│ ├── channel_summary.sql
-│ └── dashboard_queries.sql
+│   ├── cleaned_touchpoints.sql
+│   ├── journey_enriched.sql
+│   ├── last_touch.sql
+│   ├── linear_attribution.sql
+│   ├── channel_summary.sql
+│
+├── databricks/
+│   ├── marketing_attribution_notebook.dbc
+│   └── visualizations_export/
+│
 ├── screenshots/
-│ ├── dashboard_overview.png
-│ ├── channel_summary_chart.png
-│ ├── journey_enriched_preview.png
-├── README.md
+│   ├── dashboard.png
+│   ├── visualizations/
+│
+└── README.md
 ```
-
-
----
-
-## 🏁 Optional Enhancements
-
-- Add **weighted multi-touch attribution** (e.g., time-decay, U-shaped).  
-- Integrate with **dbt** for modular, production-grade pipeline modeling.  
-- Build a **Streamlit**, **Tableau**, or **Power BI** dashboard using Snowflake data.  
-- Add **Azure ML** or **Databricks** integration for predictive modeling.  
-- Automate ingestion and transformation using **Snowflake Tasks** and **Streams**.  
-- Expand into MMM (Marketing Mix Modeling) using synthetic spend data.
-
 ---
 
 ## 👤 Author
